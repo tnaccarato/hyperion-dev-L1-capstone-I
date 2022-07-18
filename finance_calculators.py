@@ -9,17 +9,43 @@
 #
 # Created:      13/05/2022
 # ------------------------------------------------------------------------------
-
-
+# Importing Libraries
 # Imports the math package for use of power function
 import math
-# Imports the tkinter package
+# Imports the tkinter package for UI
 import tkinter as tk
 from tkinter import ttk
+# ------------------------------------------------------------------------------
+# Defining Functions
+
+
+
+
+
+
+
+# ------------------------------------------------------------------------------
+
+
+## Creates UI window
+root = tk.Tk()
+root.title("Financial Calculator")
+
+# Sets the window size
+window_width = 400
+window_height = 200
+# get the screen dimension
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+# find the center point
+center_x = int(screen_width/2 - window_width / 2)
+center_y = int(screen_height/2 - window_height / 2)
+# set the position of the window to the center of the screen
+root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
 # Asks the user for an input of either loan or investment
-print("Please select either \'investment\' or \'bond\' from the menu below to \
-proceed:")
+ttk.Label(root, text="Please select either \'investment\' or \'bond\' from the\
+ menu \nbelow to proceed:", anchor="center", justify="center").pack()
 calculation_type = input(
     "Would you like to perform an \'investment\' or a \'bond\' calculation?\
 \n")
