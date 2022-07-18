@@ -13,6 +13,9 @@
 
 # Imports the math package for use of power function
 import math
+# Imports the tkinter package
+import tkinter as tk
+from tkinter import ttk
 
 # Asks the user for an input of either loan or investment
 print("Please select either \'investment\' or \'bond\' from the menu below to \
