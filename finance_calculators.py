@@ -10,27 +10,97 @@
 # Created:      13/05/2022
 # ------------------------------------------------------------------------------
 # Importing Libraries
+
 # Imports the math package for use of power function
 import math
 # Imports the tkinter package for UI
 import tkinter as tk
-from tkinter import ttk
+from tkinter import Toplevel, ttk
 # ------------------------------------------------------------------------------
 # Defining Functions
 
 
+def simple_interest(deposit_amount, interest_rate, investment_years):
+    '''Calculates simple interest'''
+    global window_width, window_height, center_x, center_y
+    simple_window = Toplevel(root)
+    simple_window.title("Simple Interest Result")
+    simple_window.geometry(f'{window_width}x{window_height}+{center_x}+\
+                           {center_y}')
+    # Converts interest rate to percentage
+    interest_rate = interest_rate/100
+    # Calculates total interest
+    total_interest = deposit_amount * \
+    (1 + interest_rate * investment_years)
+    total_interest = format(total_interest, '.2f')
+    # Displays a label with the total interest
+    ttk.Label(simple_window, text=f"The total in your account with interest \
+will be £{total_interest}").pack()
 
 
+def compound_interest(deposit_amount, interest_rate, investment_years):
+    '''Calculates compound interest'''
+    global window_width, window_height, center_x, center_y
+    compound_window = Toplevel(root)
+    compound_window.title("Compound Interest Result")
+    compound_window.geometry(f'{window_width}x{window_height}+{center_x}+\
+        {center_y}')
+    # Converts interest rate to percentage
+    interest_rate = interest_rate/100
+    # Calculates total interest
+    total_interest = deposit_amount * \
+        math.pow((1+interest_rate), investment_years)
+    total_interest = format(total_interest, '.2f')  # Rounds to 2sf
+    # Displays a label with the total interest
+    ttk.Label(compound_window, text=f"The total in your account with interest \
+will be £{total_interest}").pack()
 
 
-
+def investment_click():
+    '''Displays functions for investment calculation'''
+    # Creates a new window if investment is clicked
+    global window_width, window_height, center_x, center_y
+    investment_window = Toplevel(root)
+    investment_window.title("Investment")
+    window_height = 300
+    window_width = 400
+    investment_window.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
+    # Asks user for inputs of:
+    # Deposit amount
+    menu_text = ttk.Label(investment_window, text="How much are you depositing \
+into your account in £?").pack()
+    deposit_amount = tk.StringVar(investment_window, "0")
+    ttk.Entry(investment_window, textvariable=deposit_amount).pack()
+    # Interest rate
+    menu_text = ttk.Label(investment_window, text="What is the interest rate \
+of the account?\
+ Please enter the percentage but don't worry about the \'%\' sign!").pack()
+    interest_rate = tk.StringVar(investment_window, "0")
+    ttk.Entry(investment_window, textvariable=interest_rate).pack()
+    # How many years they are investing for
+    menu_text = ttk.Label(investment_window, text="How many years are you \
+investing for?").pack()
+    investment_years = tk.StringVar(investment_window, "0")
+    ttk.Entry(investment_window, textvariable=investment_years).pack()
+    # The type of interest
+    menu_text = ttk.Label(investment_window, text="What type of interest \
+calculation would you like to perform?").pack()
+    # Button for simple interest
+    simple_button = ttk.Button(investment_window, text="Simple",
+        command= lambda: simple_interest(float(deposit_amount.get()),
+            float(interest_rate.get()),
+                float(investment_years.get()))).pack()
+    # Button for compound interest
+    compound_button = ttk.Button(investment_window, text="Compound",
+        command=lambda: simple_interest(float(deposit_amount.get()),
+            float(interest_rate.get()),
+                float(investment_years.get()))).pack()
 # ------------------------------------------------------------------------------
 
 
-## Creates UI window
+# Creates UI window
 root = tk.Tk()
 root.title("Financial Calculator")
-
 # Sets the window size
 window_width = 400
 window_height = 200
@@ -43,60 +113,23 @@ center_y = int(screen_height/2 - window_height / 2)
 # set the position of the window to the center of the screen
 root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 
-# Asks the user for an input of either loan or investment
-ttk.Label(root, text="Please select either \'investment\' or \'bond\' from the\
- menu \nbelow to proceed:", anchor="center", justify="center").pack()
-calculation_type = input(
-    "Would you like to perform an \'investment\' or a \'bond\' calculation?\
-\n")
-# Makes `calculation_type` lowercase so that case sensitivity doesn't occur
-calculation_type = calculation_type.lower()
-# Removes whitespace from `calculation_type` to anticipate error
-calculation_type = calculation_type.replace(" ", "")
+# Creates a label widget for the main menu text
+ttk.Label(root, text="Please select either \'investment\' or \
+\'bond\' from the menu \nbelow to proceed:", anchor="center",
+                      justify="center").pack()
+
+# Creates buttons for selecting investment or bond
+investment_button = ttk.Button(root, text="Investment",
+                               command=investment_click).pack()
+
+root.mainloop()
+
+bond_button = ttk.Button(root, text="Bond", command=bond_click()).pack()
 
 
-# Decides what calculations the program should run, based on the user's input:
 
-# If investment, ask the user for inputs of:
-if calculation_type == "investment":
-    # The amount of money that they are depositing
-    deposit_amount = float(
-        input("How much are you depositing into your account in £?\n"))
-    # The interest rate (1)
-    interest_rate = float(input("""What is the interest rate of the account?
-Please enter the percentage but don't worry about the \'%\' sign! \n"""))
-    # Converts `interest_rate` into a percentage by dividing by 100
-    interest_rate = interest_rate/100
-    # The number of years they plan on investing for
-    investment_years = float(
-        input("How many years do you plan on investing for?\n"))
-    # The type of interest (simple or compound)
-    interest = input("Would you like 'compound' or 'simple' interest? \n")
-    interest = interest.lower()
-    interest = interest.replace(" ", "")
 
-    # Decides what to do based on the type of interest the user selected
-
-    # If simple, calculate total interest using the following formula:
-    # deposit_amount(1 + interest_rate x investment_years)
-    if interest == "simple":
-        total_interest = deposit_amount * \
-            (1 + interest_rate * investment_years)
-        total_interest = format(total_interest, '.2f')  # Rounds to 2sf
-        print("The total in your account with interest will be £{}.".format(
-            total_interest))
-    # If compound, calculate the total interest using the following formula:
-    # deposit_amount(1 + interest_rate) ^ investment_years
-    elif interest == "compound":
-        total_interest = deposit_amount * \
-            math.pow((1+interest_rate), investment_years)
-        total_interest = format(total_interest, '.2f')  # Rounds to 2sf
-        print("The total in your account with interest will be £{}.".format(
-            total_interest))
-    # If anything else is selected, print an error message
-    else:
-        print("""The interest type \'{}\' was not recognised. Please enter
-either \'simple\' or \'complex\'.""".format(interest))
+# Decides what to do based on the type of interest the user selected
 
 # If bond, asks the user for the following inputs:
 elif calculation_type == "bond":
@@ -122,15 +155,8 @@ Please enter as a percentage but don't worry about the \'%\' sign! \n"""))
     repayment = format(repayment, '.2f')  # Rounds to 2sf
     print("The amount you have to pay back monthly is £{}.".format(repayment))
 
-# If the user enters anything other than investment or bond, give an error
-# message
-else:
-    print("""The calculation type \'{}\' was not recognised. Please enter
-either \'investment\' or \'bond\'.""".format(
-        calculation_type))
 
-# Keeps terminal open so that final print statement can still be shown (2)
-input("Thank you for using our services. Please press enter to quit.")
+
 
 # References
 # (1) For use of multiline strings:
