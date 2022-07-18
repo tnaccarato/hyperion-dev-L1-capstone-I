@@ -13,6 +13,7 @@
 
 # Imports the math package for use of power function
 from cgitb import text
+from ctypes import windll
 import math
 # Imports the tkinter package for UI
 import tkinter as tk
@@ -27,6 +28,7 @@ def simple_interest(deposit_amount, interest_rate, investment_years):
     global window_width, window_height, center_x, center_y
     simple_window = Toplevel(root)
     simple_window.title("Simple Interest Result")
+    window_height = 50
     simple_window.geometry(f'{window_width}x{window_height}+{center_x}+\
 {center_y}')
     # Converts interest rate to percentage
@@ -46,6 +48,7 @@ def compound_interest(deposit_amount, interest_rate, investment_years):
     global window_width, window_height, center_x, center_y
     compound_window = Toplevel(root)
     compound_window.title("Compound Interest Result")
+    window_height = 50
     compound_window.geometry(f'{window_width}x{window_height}+{center_x}+\
 {center_y}')
     # Converts interest rate to percentage
@@ -66,7 +69,7 @@ def investment_click():
     investment_window = Toplevel(root)
     investment_window.title("Investment")
     window_height = 300
-    window_width = 400
+    window_width = 600
     investment_window.geometry(f'{window_width}x{window_height}+{center_x}+\
 {center_y}')
     # Asks user for inputs of:
@@ -77,8 +80,8 @@ def investment_click():
     ttk.Entry(investment_window, textvariable=deposit_amount).pack()
     # Interest rate
     menu_text = ttk.Label(investment_window, text="What is the interest rate \
-of the account?\
- Please enter the percentage but don't worry about the \'%\' sign!").pack()
+of the account?\n Please enter the percentage but don't worry about the \'%\' \
+sign!", anchor="center", justify="center").pack()
     interest_rate = tk.StringVar(investment_window, "0")
     ttk.Entry(investment_window, textvariable=interest_rate).pack()
     # How many years they are investing for
@@ -96,7 +99,7 @@ calculation would you like to perform?").pack()
                 float(investment_years.get()))).pack()
     # Button for compound interest
     compound_button = ttk.Button(investment_window, text="Compound",
-        command=lambda: simple_interest(float(deposit_amount.get()),
+        command=lambda: compound_interest(float(deposit_amount.get()),
             float(interest_rate.get()),
                 float(investment_years.get()))).pack()
 
@@ -106,6 +109,8 @@ def bond_calculation(present_value, interest_rate, months_repaying):
     global window_width, window_height, center_x, center_y
     bond_result = Toplevel(root)
     bond_result.title("Bond Calculation Result")
+    window_height = 50
+    window_width = 400
     bond_result.geometry(f'{window_width}x{window_height}+{center_x}+\
 {center_y}')
     # Converts `interest_rate` into a percentage by dividing by 100
@@ -119,8 +124,8 @@ def bond_calculation(present_value, interest_rate, months_repaying):
                                                           -months_repaying))
     repayment = format(repayment, '.2f')  # Rounds to 2sf
     # Creates a text box in the window
-    ttk.Label(text="The amount you have to pay back monthly is \
-        £{repayment}.").pack()
+    ttk.Label(bond_result, text=f"The amount you have to pay back monthly is \
+£{repayment}.").pack()
 
 
 def bond_click():
@@ -128,25 +133,28 @@ def bond_click():
     global window_width, window_height, center_x, center_y
     bond_window = Toplevel(root)
     bond_window.title("Bond")
-    window_height = 300
-    window_width = 400
+    window_height = 250
+    window_width = 450
     bond_window.geometry(f'{window_width}x{window_height}+{center_x}+\
 {center_y}')
     # Asks user for inputs of:
     # The present value of the house
     menu_text = ttk.Label(bond_window, text="What is the current value of the \
-        house in £?").pack()
+house in £?").pack()
     present_value = tk.StringVar(bond_window, "0")
     ttk.Entry(bond_window, textvariable=present_value).pack()
     # The interest rate
-    menu_text = ttk.Label(bond_window, text="What is the interest rate? Please \
-enter as a percentage but don't worry about the \'%\' sign!")
+    menu_text = ttk.Label(bond_window, text="What is the interest rate?\n\
+Please enter as a percentage but don't worry about the \'%\' sign!",
+anchor="center",
+justify="center").pack()
     interest_rate = tk.StringVar(bond_window, "0")
-    ttk.Entry(bond_window, textvariable=interest_rate)
+    ttk.Entry(bond_window, textvariable=interest_rate).pack()
     # The number of months they will take to repay the loan
     menu_text = ttk.Label(bond_window, text="How many months do you intend to take \
-to repay the loan?")
+to repay the loan?").pack()
     months_repaying = tk.StringVar(bond_window, "0")
+    ttk.Entry(bond_window, textvariable=months_repaying).pack()
     # Creates a confirmation button
     ttk.Button(bond_window, text="Go",
                command=lambda: bond_calculation(float(present_value.get()),
@@ -174,11 +182,11 @@ root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
 # Creates a label widget for the main menu text
 ttk.Label(root, text="Please select either \'investment\' or \
 \'bond\' from the menu \nbelow to proceed:", anchor="center",
-                      justify="center").pack()
+justify="center").pack()
 
 # Creates buttons for selecting investment or bond
 investment_button = ttk.Button(root, text="Investment",
                                command=investment_click).pack()
-bond_button = ttk.Button(root, text="Bond", command=bond_click()).pack()
+bond_button = ttk.Button(root, text="Bond", command=bond_click).pack()
 
 root.mainloop()
